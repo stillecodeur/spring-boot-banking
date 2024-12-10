@@ -1,6 +1,7 @@
 package com.anirudh.bankingapp.service;
 
 import com.anirudh.bankingapp.dto.AccountDto;
+import com.anirudh.bankingapp.exception.AccountException;
 import com.anirudh.bankingapp.mapper.AccountMapper;
 import com.anirudh.bankingapp.model.Account;
 import com.anirudh.bankingapp.repository.AccountRepository;
@@ -24,7 +25,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountDto getAccount(Long id) {
-        Account account= repository.findById(id).orElseThrow(()->new RuntimeException("Account doesn't exist"));
+        Account account= repository.findById(id).orElseThrow(()->new AccountException("Account doesn't exist"));
         return AccountMapper.mapToAccountDto(account);
     }
 
@@ -36,7 +37,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountDto depositAmount(Long id, double amount) {
-        Account account = repository.findById(id).orElseThrow(()->new RuntimeException("Account doesn't exist"));
+        Account account = repository.findById(id).orElseThrow(()->new AccountException("Account doesn't exist"));
         double balance=account.getBalance()+amount;
         account.setBalance(balance);
         return AccountMapper.mapToAccountDto(repository.save(account));
@@ -44,7 +45,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountDto withdrawAmount(Long id, double amount) {
-        Account account = repository.findById(id).orElseThrow(()->new RuntimeException("Account doesn't exist"));
+        Account account = repository.findById(id).orElseThrow(()->new AccountException("Account doesn't exist"));
         double balance=account.getBalance()-amount;
         account.setBalance(balance);
         return AccountMapper.mapToAccountDto(repository.save(account));
@@ -52,7 +53,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void deleteAccount(Long id) {
-        Account account = repository.findById(id).orElseThrow(()->new RuntimeException("Account doesn't exist"));
+        Account account = repository.findById(id).orElseThrow(()->new AccountException("Account doesn't exist"));
         repository.delete(account);
     }
 }
