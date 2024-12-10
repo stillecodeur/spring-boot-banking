@@ -1,6 +1,7 @@
 package com.anirudh.bankingapp.service;
 
 import com.anirudh.bankingapp.dto.AccountDto;
+import com.anirudh.bankingapp.dto.TransferFundDto;
 import com.anirudh.bankingapp.exception.AccountException;
 import com.anirudh.bankingapp.mapper.AccountMapper;
 import com.anirudh.bankingapp.model.Account;
@@ -55,5 +56,17 @@ public class AccountServiceImpl implements AccountService{
     public void deleteAccount(Long id) {
         Account account = repository.findById(id).orElseThrow(()->new AccountException("Account doesn't exist"));
         repository.delete(account);
+    }
+
+    @Override
+    public void transferFunds(TransferFundDto transferFundDto) {
+        Account fromAccount=repository.findById(transferFundDto.fromAccountId()).orElseThrow(()->new AccountException("Account doesn't exist"));
+        Account toAccount=repository.findById(transferFundDto.toAccountId()).orElseThrow(()->new AccountException("Account doesn't exist"));
+
+        fromAccount.setBalance(fromAccount.getBalance()-transferFundDto.amount());
+        toAccount.setBalance(toAccount.getBalance()+transferFundDto.amount());
+
+        repository.save(fromAccount);
+        repository.save(toAccount);
     }
 }
