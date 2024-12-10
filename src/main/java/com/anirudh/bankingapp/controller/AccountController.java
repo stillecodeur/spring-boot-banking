@@ -1,6 +1,7 @@
 package com.anirudh.bankingapp.controller;
 
 import com.anirudh.bankingapp.dto.AccountDto;
+import com.anirudh.bankingapp.dto.TransactionDto;
 import com.anirudh.bankingapp.dto.TransferFundDto;
 import com.anirudh.bankingapp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +61,9 @@ public class AccountController {
         return ResponseEntity.ok("Transfer successfully");
     }
 
+    @GetMapping("{id}/transactions")
+    public ResponseEntity<List<TransactionDto>> getAccountTransactions(@PathVariable Long id){
+        List<TransactionDto> list=accountService.getAccountTransactions(id);
+        return ResponseEntity.ok(list);
+    }
 }
